@@ -92,7 +92,7 @@ body{font-family:var(--f-body);font-size:var(--fs);line-height:var(--lh);backgro
 .ch h2~h2{margin-top:56px;padding-top:28px;border-top:1px solid var(--border)}
 .ch h3{font-size:var(--h3);font-weight:700;color:var(--fg);margin:40px 0 18px;line-height:1.4;padding-left:16px;border-left:4px solid var(--accent)}
 .ch h4{font-size:var(--h4);font-weight:600;color:var(--accent);margin:28px 0 12px}
-.ch p{margin:0 0 16px;color:var(--fg2);text-align:justify;word-break:keep-all}
+.ch p{margin:0 0 16px;color:var(--fg2);word-break:keep-all}
 .ch em{color:var(--muted)}.ch strong{color:var(--fg);font-weight:700}
 .ch hr{border:none;border-top:1px solid var(--border);margin:36px 0}
 .ch ul,.ch ol{margin:0 0 16px 20px;color:var(--fg2)}.ch li{margin-bottom:8px}
@@ -104,7 +104,7 @@ body{font-family:var(--f-body);font-size:var(--fs);line-height:var(--lh);backgro
 /* ── Blockquote ── */
 .ch blockquote{margin:32px 0;padding:24px 28px;background:var(--quote-bg);border-left:4px solid var(--accent);border-radius:0 var(--r-s) var(--r-s) 0;font-size:.93rem;color:var(--fg2);line-height:1.8;position:relative}
 .ch blockquote::before{content:'\201C';position:absolute;top:8px;left:10px;font-size:2.4rem;color:var(--accent);opacity:.12;font-family:Georgia,serif}
-.ch blockquote p{margin:0 0 8px;text-align:left}.ch blockquote p:last-child{margin:0}
+.ch blockquote p{margin:0 0 8px}.ch blockquote p:last-child{margin:0}
 
 /* closing quote */
 .ch>blockquote:last-of-type{text-align:center;border-left:none;border-radius:0;background:transparent;padding:28px 20px;font-style:italic;font-size:1.05rem;color:var(--fg);position:relative}
@@ -176,6 +176,7 @@ body{font-family:var(--f-body);font-size:var(--fs);line-height:var(--lh);backgro
     <div class="s-sub">재무제표가 보내는 시그널을 읽는 법</div>
   </div>
   <nav class="s-nav" id="sidebarNav">
+    <a class="n-a" href="#s00" data-sec="s00" style="font-weight:600;color:var(--fg)">프롤로그</a>
     <div class="n-pt">Part 1 — Language</div>
     <a class="n-a" href="#s11" data-sec="s11">1.1 발생주의 시그널</a>
     <a class="n-a" href="#s12" data-sec="s12">1.2 재무제표 연결 구조</a>
@@ -203,6 +204,7 @@ body{font-family:var(--f-body);font-size:var(--fs);line-height:var(--lh);backgro
     <a class="n-a" href="#s61" data-sec="s61">6.1 연결재무제표 · 지배구조</a>
     <a class="n-a" href="#s62" data-sec="s62">6.2 외화환산</a>
     <a class="n-a" href="#s63" data-sec="s63">6.3 공시 분석 심화</a>
+    <a class="n-a" href="#s70" data-sec="s70" style="font-weight:600;color:var(--fg);margin-top:12px">에필로그</a>
   </nav>
   <div class="s-foot">DART Insight &copy; 2025</div>
 </div>
@@ -257,6 +259,7 @@ body{font-family:var(--f-body);font-size:var(--fs);line-height:var(--lh);backgro
 
 <script>
 const C=[
+  {id:'s00',f:'0-0_prologue.md',s:[]},
   {id:'s11',f:'1-1_accrual_basis_signal_FINAL.md',s:[]},
   {id:'s12',f:'1-2_financial_statement_pipeline.md',s:[]},
   {id:'s13',f:'1-3_accounting_measurement_limits.md',s:[]},
@@ -274,6 +277,7 @@ const C=[
   {id:'s51',f:'5-1_5-2_fcf_dcf.md',s:['s52']},
   {id:'s53',f:'5-3_5-4_relative_valuation_checklist.md',s:['s54']},
   {id:'s61',f:'6-1_6-2_6-3_advanced_signals.md',s:['s62','s63']},
+  {id:'s70',f:'7-0_epilogue.md',s:[]},
 ];
 const SP={'s52':/^#\s+5\.2\s/m,'s54':/^#\s+5\.4\s/m,'s62':/^#\s+6\.2\s/m,'s63':/^#\s+6\.3\s/m};
 
