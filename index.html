@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Financial Signal — 재무제표가 보내는 시그널</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ═══════════════════════════════════════
+   Design System — Light
+   ═══════════════════════════════════════ */
+:root{
+  --bg:#f7f6f3;
+  --bg2:#efeee9;
+  --fg:#1c1c1e;
+  --fg2:#3a3a3c;
+  --card:#ffffff;
+  --accent:#0a6e5c;
+  --accent-light:#e8f5f0;
+  --accent2:#c4873b;
+  --accent2-light:#fdf4e8;
+  --glow:rgba(10,110,92,.06);
+  --glow2:rgba(196,135,59,.08);
+  --sidebar-bg:rgba(255,255,255,.82);
+  --sidebar-fg:#636366;
+  --sidebar-active:#0a6e5c;
+  --border:rgba(0,0,0,.06);
+  --border-strong:rgba(0,0,0,.1);
+  --muted:#8e8e93;
+  --code-bg:#f2f1ed;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.03);
+  --shadow:0 4px 16px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.04);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04);
+  --font-body:'Noto Serif KR',Georgia,serif;
+  --font-ui:'Pretendard',-apple-system,sans-serif;
+  --page-max:780px;
+  --sidebar-w:272px;
+  --fs-body:1.04rem;--fs-h1:1.9rem;--fs-h2:1.55rem;--fs-h3:1.22rem;--fs-h4:1.08rem;
+  --lh:1.9;
+  --radius:16px;
+  --radius-sm:10px;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+
+/* ═══ Dark ═══ */
+[data-theme="dark"]{
+  --bg:#111113;
+  --bg2:#1c1c1e;
+  --fg:#f5f5f7;
+  --fg2:#d1d1d6;
+  --card:#1c1c1e;
+  --accent:#34c7a0;
+  --accent-light:rgba(52,199,160,.1);
+  --accent2:#e8a948;
+  --accent2-light:rgba(232,169,72,.1);
+  --glow:rgba(52,199,160,.06);
+  --glow2:rgba(232,169,72,.06);
+  --sidebar-bg:rgba(28,28,30,.92);
+  --sidebar-fg:#98989d;
+  --sidebar-active:#34c7a0;
+  --border:rgba(255,255,255,.06);
+  --border-strong:rgba(255,255,255,.1);
+  --muted:#636366;
+  --code-bg:#2c2c2e;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.2);
+  --shadow:0 4px 16px rgba(0,0,0,.25);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.35);
+}
+
+[data-fs="small"]{--fs-body:.95rem;--fs-h1:1.6rem;--fs-h2:1.35rem;--fs-h3:1.08rem;--fs-h4:.98rem}
+[data-fs="large"]{--fs-body:1.16rem;--fs-h1:2.15rem;--fs-h2:1.75rem;--fs-h3:1.38rem;--fs-h4:1.18rem}
+
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--font-body);background:var(--bg);color:var(--fg);
+  line-height:var(--lh);font-size:var(--fs-body);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  transition:background .4s var(--ease),color .4s var(--ease);
+}
+::selection{background:var(--accent);color:#fff}
+
+/* ═══ Progress ═══ */
+#progress{
+  position:fixed;top:0;left:0;height:2.5px;z-index:9999;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  width:0;transition:width .12s linear;pointer-events:none;
+}
+
+/* ═══ Sidebar ═══ */
+.sidebar{
+  position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
+  background:var(--sidebar-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-right:1px solid var(--border);
+  overflow-y:auto;z-index:100;
+  display:flex;flex-direction:column;
+  transition:transform .35s var(--ease);
+}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
+.sidebar-header{padding:36px 24px 22px;flex-shrink:0}
+.sidebar-brand{
+  font-family:var(--font-ui);font-size:.64rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.sidebar-brand::before{
+  content:'';display:inline-block;width:8px;height:8px;
+  background:var(--accent);border-radius:2px;
+}
+.sidebar-title{
+  font-family:var(--font-body);font-size:1.2rem;font-weight:900;
+  color:var(--fg);line-height:1.3;letter-spacing:-.01em;
+}
+.sidebar-subtitle{
+  font-size:.76rem;color:var(--muted);line-height:1.5;margin-top:4px;
+}
+.sidebar-divider{
+  height:1px;background:var(--border);margin:0 24px;flex-shrink:0;
+}
+.sidebar-nav{flex:1;padding:12px 0;overflow-y:auto}
+.nav-part{
+  padding:16px 24px 5px;font-family:var(--font-ui);font-size:.62rem;
+  font-weight:800;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--accent2);
+}
+.nav-link{
+  display:block;padding:6px 24px 6px 28px;font-family:var(--font-ui);
+  font-size:.8rem;font-weight:500;color:var(--sidebar-fg);text-decoration:none;
+  border-left:2px solid transparent;transition:all .2s var(--ease);
+  line-height:1.5;margin:1px 0;
+}
+.nav-link:hover{color:var(--sidebar-active);background:var(--glow)}
+.nav-link.active{
+  color:var(--sidebar-active);font-weight:700;
+  border-left-color:var(--accent);background:var(--glow);
+}
+.sidebar-footer{
+  padding:18px 24px;flex-shrink:0;
+  font-family:var(--font-ui);font-size:.68rem;color:var(--muted);
+  text-align:center;line-height:1.5;border-top:1px solid var(--border);
+}
+
+/* ═══ Overlay + Hamburger ═══ */
+.overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);
+  z-index:99;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.overlay.show{display:block}
+.hamburger{
+  display:none;position:fixed;top:14px;left:14px;z-index:101;
+  width:40px;height:40px;border:none;border-radius:var(--radius-sm);cursor:pointer;
+  background:var(--card);box-shadow:var(--shadow);
+  font-size:18px;color:var(--fg);transition:all .2s var(--ease);
+  align-items:center;justify-content:center;
+}
+.hamburger:active{transform:scale(.92)}
+
+/* ═══ Main ═══ */
+.main{
+  margin-left:var(--sidebar-w);min-height:100vh;
+  padding:40px 36px 100px;
+  transition:margin .35s var(--ease);
+}
+.main-inner{max-width:var(--page-max);margin:0 auto}
+
+/* ═══ Hero ═══ */
+.hero{
+  text-align:center;padding:72px 20px 56px;margin-bottom:44px;
+  position:relative;
+}
+.hero::after{
+  content:'';display:block;width:60px;height:2px;margin:0 auto;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  margin-top:36px;border-radius:1px;
+}
+.hero-badge{
+  display:inline-block;font-family:var(--font-ui);font-size:.62rem;
+  font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);padding:5px 14px;border-radius:4px;margin-bottom:22px;
+  border:1.5px solid var(--accent);
+}
+.hero h1{
+  font-size:2.8rem;font-weight:900;color:var(--fg);
+  line-height:1.2;margin-bottom:16px;letter-spacing:-.03em;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub{
+  font-size:1rem;color:var(--muted);line-height:1.7;
+  max-width:480px;margin:0 auto;font-family:var(--font-ui);font-weight:400;
+}
+
+/* ═══ Chapter Card ═══ */
+.chapter-section{
+  background:var(--card);border-radius:var(--radius);
+  padding:52px 48px;margin-bottom:28px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border);
+  transition:box-shadow .3s var(--ease),transform .3s var(--ease);
+}
+.chapter-section:hover{
+  box-shadow:var(--shadow);transform:translateY(-1px);
+}
+
+/* ═══ Typography ═══ */
+.chapter-section h1{
+  font-size:var(--fs-h1);font-weight:900;color:var(--fg);
+  margin:40px 0 20px;line-height:1.3;letter-spacing:-.02em;
+  padding-bottom:14px;
+  border-bottom:1.5px solid var(--border-strong);
+}
+.chapter-section h1:first-child{
+  margin-top:0;text-align:center;border-bottom:none;padding-bottom:0;
+  margin-bottom:4px;font-size:1.4rem;letter-spacing:.05em;
+  color:var(--accent);font-weight:800;
+}
+.chapter-section h2{
+  font-size:var(--fs-h2);font-weight:700;color:var(--fg);
+  margin:40px 0 16px;line-height:1.35;letter-spacing:-.01em;
+  padding-left:16px;border-left:3px solid var(--accent);
+}
+.chapter-section h2:first-of-type{margin-top:12px}
+.chapter-section h2 ~ h2{
+  margin-top:52px;padding-top:28px;border-top:1px solid var(--border);
+}
+.chapter-section h3{
+  font-size:var(--fs-h3);font-weight:700;color:var(--fg2);
+  margin:32px 0 12px;line-height:1.4;
+  font-family:var(--font-ui);
+}
+.chapter-section h4{
+  font-size:var(--fs-h4);font-weight:700;color:var(--fg);
+  margin:24px 0 10px;font-family:var(--font-ui);
+}
+.chapter-section p{margin:0 0 18px;font-size:var(--fs-body);color:var(--fg2)}
+.chapter-section em{color:var(--muted);font-style:italic}
+.chapter-section strong{color:var(--fg);font-weight:700}
+.chapter-section hr{
+  border:none;height:1px;background:var(--border);margin:32px 0;
+}
+.chapter-section ul,.chapter-section ol{
+  margin:0 0 18px 20px;font-size:var(--fs-body);color:var(--fg2);
+}
+.chapter-section li{margin-bottom:8px}
+.chapter-section a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+
+/* ═══ Blockquote ═══ */
+.chapter-section blockquote{
+  margin:24px 0;padding:20px 24px;
+  background:var(--accent-light);
+  border-left:3px solid var(--accent);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:.96rem;color:var(--fg2);line-height:1.75;
+}
+.chapter-section blockquote p{margin:0 0 8px}
+.chapter-section blockquote p:last-child{margin:0}
+
+/* closing quote */
+.chapter-section > blockquote:last-of-type{
+  text-align:center;border-left:none;border-radius:0;
+  background:transparent;
+  padding:28px 32px;font-style:italic;font-size:1.05rem;
+  position:relative;color:var(--fg);
+}
+.chapter-section > blockquote:last-of-type::before,
+.chapter-section > blockquote:last-of-type::after{
+  content:'';display:block;width:48px;height:1.5px;margin:0 auto;
+  background:linear-gradient(90deg,transparent,var(--accent2),transparent);
+}
+.chapter-section > blockquote:last-of-type::before{margin-bottom:20px}
+.chapter-section > blockquote:last-of-type::after{margin-top:20px}
+
+/* ═══ Code ═══ */
+.chapter-section pre{
+  background:var(--code-bg);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:22px 24px;margin:18px 0 22px;
+  overflow-x:auto;font-size:.85rem;line-height:1.7;
+  font-family:'SF Mono','Consolas','Menlo',monospace;
+  color:var(--fg2);
+}
+.chapter-section code{
+  font-family:'SF Mono','Consolas','Menlo',monospace;font-size:.88em;
+  background:var(--code-bg);padding:2px 7px;border-radius:5px;
+  color:var(--accent);
+}
+.chapter-section pre code{background:none;padding:0;font-size:inherit;color:inherit}
+
+/* ═══ Table ═══ */
+.table-wrap{
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  margin:18px 0 22px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);
+}
+.table-wrap table{margin:0;border-radius:var(--radius-sm)}
+.chapter-section table{
+  width:100%;border-collapse:collapse;
+  font-size:.9rem;font-family:var(--font-ui);
+}
+.chapter-section thead th{
+  background:var(--bg2);color:var(--fg);font-weight:700;
+  padding:11px 16px;text-align:left;font-size:.78rem;
+  letter-spacing:.3px;text-transform:none;
+  border-bottom:1.5px solid var(--border-strong);
+}
+.chapter-section tbody td{
+  padding:11px 16px;border-bottom:1px solid var(--border);
+  vertical-align:top;color:var(--fg2);
+}
+.chapter-section tbody tr:last-child td{border-bottom:none}
+.chapter-section tbody tr:hover{background:var(--glow)}
+
+/* ═══ Floating Buttons ═══ */
+.float-btns{
+  position:fixed;bottom:24px;right:24px;z-index:90;
+  display:flex;flex-direction:column;gap:8px;
+}
+.float-btn{
+  width:40px;height:40px;border:none;border-radius:var(--radius-sm);cursor:pointer;
+  background:var(--card);box-shadow:var(--shadow);
+  color:var(--fg2);font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);
+  transition:all .2s var(--ease);font-family:var(--font-ui);
+}
+.float-btn:hover{
+  box-shadow:var(--shadow-lg);transform:translateY(-2px);
+  color:var(--accent);border-color:var(--accent);
+}
+.float-btn:active{transform:translateY(0);box-shadow:var(--shadow-sm)}
+
+/* ═══ Loading ═══ */
+.loading{text-align:center;padding:100px 20px}
+.loading-spinner{
+  width:32px;height:32px;border:2.5px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;
+  animation:spin .8s linear infinite;margin:0 auto 14px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:var(--font-ui);font-size:.85rem;color:var(--muted)}
+
+/* ═══ Fade-in ═══ */
+.chapter-section{
+  opacity:0;transform:translateY(20px);
+  transition:opacity .5s var(--ease),transform .5s var(--ease),box-shadow .3s var(--ease);
+}
+.chapter-section.visible{opacity:1;transform:translateY(0)}
+
+/* ═══ Scroll margin ═══ */
+.chapter-section{scroll-margin-top:20px}
+
+/* ═══ Responsive ═══ */
+@media(max-width:960px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{display:flex}
+  .main{margin-left:0;padding:28px 18px 80px}
+  .chapter-section{padding:36px 28px;border-radius:var(--radius-sm)}
+  .hero h1{font-size:2.1rem}
+  .hero{padding:56px 16px 40px}
+}
+@media(max-width:600px){
+  .chapter-section{padding:28px 20px}
+  .chapter-section h1{font-size:1.4rem}
+  .chapter-section h2{font-size:1.25rem}
+  .chapter-section table{font-size:.78rem}
+  .chapter-section thead th,.chapter-section tbody td{padding:9px 12px}
+  .float-btns{bottom:16px;right:16px}
+  .float-btn{width:38px;height:38px;font-size:14px}
+  .hero h1{font-size:1.8rem}
+}
+
+/* ═══ Print ═══ */
+@media print{
+  .sidebar,.float-btns,.hamburger,#progress,.overlay{display:none!important}
+  .main{margin-left:0!important;padding:0!important}
+  .chapter-section{break-inside:avoid;box-shadow:none!important;border:1px solid #e0e0e0;page-break-inside:avoid}
+  .hero::after{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">DART Insight</div>
+    <div class="sidebar-title">Financial Signal</div>
+    <div class="sidebar-subtitle">재무제표가 보내는 시그널을 읽는 법</div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <nav class="sidebar-nav" id="sidebarNav">
+    <div class="nav-part">Part 1 &mdash; Language</div>
+    <a class="nav-link" href="#sec-1-1" data-sec="sec-1-1">1.1 발생주의 시그널</a>
+    <a class="nav-link" href="#sec-1-2" data-sec="sec-1-2">1.2 재무제표 연결 구조</a>
+    <a class="nav-link" href="#sec-1-3" data-sec="sec-1-3">1.3 회계 측정의 한계</a>
+
+    <div class="nav-part">Part 2 &mdash; Assets &amp; Growth</div>
+    <a class="nav-link" href="#sec-2-1" data-sec="sec-2-1">2.1 유동자산의 질</a>
+    <a class="nav-link" href="#sec-2-2" data-sec="sec-2-2">2.2 투자자산과 지분법</a>
+    <a class="nav-link" href="#sec-2-3" data-sec="sec-2-3">2.3 PP&amp;E와 무형자산</a>
+    <a class="nav-link" href="#sec-2-4" data-sec="sec-2-4">2.4 영업권과 M&amp;A</a>
+    <a class="nav-link" href="#sec-2-5" data-sec="sec-2-5">2.5 성장성 분석</a>
+
+    <div class="nav-part">Part 3 &mdash; Liabilities</div>
+    <a class="nav-link" href="#sec-3-1" data-sec="sec-3-1">3.1 유동부채와 우발부채</a>
+    <a class="nav-link" href="#sec-3-2" data-sec="sec-3-2">3.2 장기부채 · 리스 · 유동성</a>
+    <a class="nav-link" href="#sec-3-3" data-sec="sec-3-3">3.3 연금 · 이연법인세 · OCI</a>
+
+    <div class="nav-part">Part 4 &mdash; Earnings Quality</div>
+    <a class="nav-link" href="#sec-4-1" data-sec="sec-4-1">4.1 수익인식의 시그널</a>
+    <a class="nav-link" href="#sec-4-2" data-sec="sec-4-2">4.2 비용 조작의 탐지</a>
+    <a class="nav-link" href="#sec-4-3" data-sec="sec-4-3">4.3 현금흐름표 검증</a>
+
+    <div class="nav-part">Part 5 &mdash; Valuation</div>
+    <a class="nav-link" href="#sec-5-1" data-sec="sec-5-1">5.1 잉여현금흐름 (FCF)</a>
+    <a class="nav-link" href="#sec-5-2" data-sec="sec-5-2">5.2 DCF 분석</a>
+    <a class="nav-link" href="#sec-5-3" data-sec="sec-5-3">5.3 상대가치 평가</a>
+    <a class="nav-link" href="#sec-5-4" data-sec="sec-5-4">5.4 HRM 종합 판단</a>
+
+    <div class="nav-part">Part 6 &mdash; Advanced</div>
+    <a class="nav-link" href="#sec-6-1" data-sec="sec-6-1">6.1 연결재무제표 · 지배구조</a>
+    <a class="nav-link" href="#sec-6-2" data-sec="sec-6-2">6.2 외화환산</a>
+    <a class="nav-link" href="#sec-6-3" data-sec="sec-6-3">6.3 공시 분석 심화</a>
+  </nav>
+  <div class="sidebar-footer">DART Insight &copy; 2025</div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+
+<main class="main">
+  <div class="main-inner" id="mainContent">
+    <section class="hero">
+      <div class="hero-badge">DART Insight Series</div>
+      <h1>Financial <em>Signal</em></h1>
+      <p class="hero-sub">재무제표가 보내는 시그널을 읽는 법 &mdash; 숫자 너머의 진실을 찾는 투자자를 위한 가이드</p>
+    </section>
+    <div id="contentArea">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">콘텐츠를 불러오는 중...</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="float-btns">
+  <button class="float-btn" id="btnTheme" title="테마 전환" aria-label="테마 전환">&#9790;</button>
+  <button class="float-btn" id="btnFont" title="글꼴 크기" aria-label="글꼴 크기">A</button>
+  <button class="float-btn" id="btnTop" title="맨 위로" aria-label="맨 위로">&#8593;</button>
+</div>
+
+<script>
+const chapters=[
+  {id:'sec-1-1',file:'1-1_accrual_basis_signal_FINAL.md',splitIds:[]},
+  {id:'sec-1-2',file:'1-2_financial_statement_pipeline.md',splitIds:[]},
+  {id:'sec-1-3',file:'1-3_accounting_measurement_limits.md',splitIds:[]},
+  {id:'sec-2-1',file:'2-1_current_asset_quality.md',splitIds:[]},
+  {id:'sec-2-2',file:'2-2_investment_assets_equity_method_FINAL.md',splitIds:[]},
+  {id:'sec-2-3',file:'2-3_ppe_intangibles.md',splitIds:[]},
+  {id:'sec-2-4',file:'2-4_goodwill_mna.md',splitIds:[]},
+  {id:'sec-2-5',file:'2-5_growth_quality.md',splitIds:[]},
+  {id:'sec-3-1',file:'3-1_current_liabilities_contingencies.md',splitIds:[]},
+  {id:'sec-3-2',file:'3-2_longterm_debt_leases_liquidity.md',splitIds:[]},
+  {id:'sec-3-3',file:'3-3_pension_deferred_tax_oci.md',splitIds:[]},
+  {id:'sec-4-1',file:'4-1_revenue_recognition.md',splitIds:[]},
+  {id:'sec-4-2',file:'4-2_cost_manipulation.md',splitIds:[]},
+  {id:'sec-4-3',file:'4-3_cash_flow_statement.md',splitIds:[]},
+  {id:'sec-5-1',file:'5-1_5-2_fcf_dcf.md',splitIds:['sec-5-2']},
+  {id:'sec-5-3',file:'5-3_5-4_relative_valuation_hrm.md',splitIds:['sec-5-4']},
+  {id:'sec-6-1',file:'6-1_6-2_6-3_advanced_signals.md',splitIds:['sec-6-2','sec-6-3']},
+];
+const sectionPatterns={
+  'sec-5-2':/^#\s+5\.2\s/m,'sec-5-4':/^#\s+5\.4\s/m,
+  'sec-6-2':/^#\s+6\.2\s/m,'sec-6-3':/^#\s+6\.3\s/m,
+};
+
+marked.setOptions({breaks:false,gfm:true,headerIds:false,mangle:false});
+
+async function loadContent(){
+  const area=document.getElementById('contentArea');
+  let html='';
+  for(const ch of chapters){
+    try{
+      const res=await fetch(ch.file);
+      if(!res.ok)throw new Error(res.status);
+      let md=await res.text();
+      if(ch.splitIds.length>0){
+        const parts=splitMarkdown(md,ch.splitIds);
+        html+=renderSection(ch.id,parts[0]);
+        for(let i=0;i<ch.splitIds.length;i++){
+          if(parts[i+1])html+=renderSection(ch.splitIds[i],parts[i+1]);
+        }
+      }else{html+=renderSection(ch.id,md)}
+    }catch(e){
+      html+=`<section class="chapter-section" id="${ch.id}"><p style="color:var(--muted)">파일을 불러올 수 없습니다: ${ch.file}</p></section>`;
+    }
+  }
+  area.innerHTML=html;
+  initObserver();updateActiveNav();
+}
+function splitMarkdown(md,splitIds){
+  const parts=[];let remaining=md;
+  for(const sid of splitIds){
+    const pat=sectionPatterns[sid];if(!pat)continue;
+    const match=remaining.match(pat);
+    if(match){const idx=remaining.indexOf(match[0]);parts.push(remaining.substring(0,idx));remaining=remaining.substring(idx)}
+  }
+  parts.push(remaining);return parts;
+}
+function renderSection(id,md){
+  md=md.replace(/\*DART Insight \|[^*]*\*/g,'');
+  md=md.replace(/\*다음\s*(섹션|챕터)[^*]*\*/g,'');
+  md=md.replace(/\*→\s*[^*]*이어짐\*/g,'');
+  md=md.replace(/\n---\s*\n\s*\n---\s*$/g,'');
+  md=md.replace(/\n---\s*\n\s*$/g,'');
+  let h=marked.parse(md);
+  h=h.replace(/<table>/g,'<div class="table-wrap"><table>');
+  h=h.replace(/<\/table>/g,'</table></div>');
+  return `<section class="chapter-section" id="${id}">${h}</section>`;
+}
+function initObserver(){
+  const secs=document.querySelectorAll('.chapter-section');
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+  },{threshold:.04,rootMargin:'0px 0px -30px 0px'});
+  secs.forEach(s=>obs.observe(s));
+}
+function updateProgress(){
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('progress').style.width=(h>0?(window.scrollY/h)*100:0)+'%';
+}
+function updateActiveNav(){
+  const links=document.querySelectorAll('.nav-link');
+  const secs=[];
+  links.forEach(l=>{const el=document.getElementById(l.getAttribute('data-sec'));if(el)secs.push({el,link:l})});
+  const sy=window.scrollY+100;let cur=null;
+  for(const s of secs){if(s.el.offsetTop<=sy)cur=s}
+  links.forEach(l=>l.classList.remove('active'));
+  if(cur)cur.link.classList.add('active');
+}
+
+// Theme
+const btnTheme=document.getElementById('btnTheme');
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('fs-theme',t);
+  btnTheme.textContent=t==='dark'?'\u2600':'\u263E';
+}
+btnTheme.addEventListener('click',()=>{
+  const c=document.documentElement.getAttribute('data-theme');
+  setTheme(c==='dark'?'light':'dark');
+});
+setTheme(localStorage.getItem('fs-theme')||'light');
+
+// Font size
+const btnFont=document.getElementById('btnFont');
+const fss=['small','default','large'];let fi=1;
+btnFont.addEventListener('click',()=>{
+  fi=(fi+1)%3;const f=fss[fi];
+  if(f==='default')document.documentElement.removeAttribute('data-fs');
+  else document.documentElement.setAttribute('data-fs',f);
+  localStorage.setItem('fs-fontsize',f);
+  btnFont.textContent={small:'A\u2212',default:'A',large:'A+'}[f];
+});
+const sf=localStorage.getItem('fs-fontsize')||'default';
+fi=fss.indexOf(sf);if(fi<0)fi=1;
+if(sf!=='default')document.documentElement.setAttribute('data-fs',sf);
+btnFont.textContent={small:'A\u2212',default:'A',large:'A+'}[sf];
+
+// Scroll to top
+document.getElementById('btnTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+// Hamburger
+const hb=document.getElementById('hamburger'),sb=document.getElementById('sidebar'),ov=document.getElementById('overlay');
+function toggleSb(){sb.classList.toggle('open');ov.classList.toggle('show')}
+hb.addEventListener('click',toggleSb);ov.addEventListener('click',toggleSb);
+document.querySelectorAll('.nav-link').forEach(l=>{
+  l.addEventListener('click',()=>{if(window.innerWidth<=960){sb.classList.remove('open');ov.classList.remove('show')}});
+});
+
+// Scroll
+let tk=false;
+window.addEventListener('scroll',()=>{
+  if(!tk){requestAnimationFrame(()=>{updateProgress();updateActiveNav();tk=false});tk=true}
+});
+
+loadContent();
+</script>
+</body>
+</html>
