@@ -66,8 +66,9 @@ PBR 숫자보다 ROE와 WACC를 먼저 비교하라. ROE > WACC이면서 PBR이 
 유형순자산(Tangible Book Value)로 PBR 재계산 권장
 ```
 
-**EV/EBITDA**
+**기업가치를 EBITDA로 나눈 배수(EV/EBITDA) — 업종 비교에 가장 많이 쓰인다**
 ```
+기업가치(EV) — 시가총액에 순부채를 더한 것. 기업을 통째로 살 때의 가격
 EV = 시가총액 + 순부채 + 소수주주지분
 EBITDA = 영업이익 + 감가상각
 
@@ -77,7 +78,7 @@ EBITDA = 영업이익 + 감가상각
 EV/FCF가 EV/EBITDA보다 실질에 가까움
 ```
 
-**PEG (PER / 성장률)**
+**PEG = PER ÷ 이익성장률 — 성장 대비 주가가 싼지 비싼지를 한 숫자로 본다**
 ```
 PEG = PER / 예상 EPS 성장률
 1배 이하 → 성장 대비 저평가 신호 (Peter Lynch 기준)
