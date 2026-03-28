@@ -34,7 +34,7 @@
 
   /* ── typography ── */
   --f-display:'Cormorant Garamond',Georgia,serif;
-  --f-body:'Noto Sans KR','Pretendard',-apple-system,sans-serif;
+  --f-body:'Noto Serif KR',Georgia,'Noto Sans KR',sans-serif;
   --f-ui:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   --f-mono:'SF Mono','JetBrains Mono','Cascadia Code','Consolas',monospace;
 
@@ -45,7 +45,7 @@
   --h2:1.38rem;
   --h3:1.12rem;
   --h4:1.02rem;
-  --lh:1.82;
+  --lh:1.9;
 
   /* ── layout ── */
   --page:740px;
@@ -406,6 +406,10 @@ const C=[
 ];
 const SP={'s52':/^#\s+5\.2\s/m,'s54':/^#\s+5\.4\s/m,'s62':/^#\s+6\.2\s/m,'s63':/^#\s+6\.3\s/m};
 marked.setOptions({breaks:false,gfm:true,headerIds:false,mangle:false});
+// Disable strikethrough to prevent ~ from becoming <del>
+const renderer=new marked.Renderer();
+renderer.del=function(text){return '~'+text+'~'};
+marked.use({renderer});
 
 async function load(){
   const a=document.getElementById('ct');let h='';
