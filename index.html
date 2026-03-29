@@ -139,6 +139,11 @@ body{font-family:var(--f-body);font-size:var(--fs);line-height:var(--lh);backgro
 .n-a.active{position:relative}
 .n-a.active::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:5px;height:5px;background:var(--accent);border-radius:50%}
 
+/* ── Page number ── */
+.ch{position:relative}
+.pg{position:absolute;top:20px;right:24px;font-family:var(--f-ui);font-size:.68rem;color:var(--muted);font-weight:400;letter-spacing:.5px}
+@media(max-width:600px){.pg{top:12px;right:14px;font-size:.6rem}}
+
 /* ── Blockquote ── */
 .ch blockquote{margin:32px 0;padding:24px 28px;background:var(--quote-bg);border-left:4px solid var(--accent);border-radius:0 var(--r-s) var(--r-s) 0;font-size:.93rem;color:var(--fg2);line-height:1.8;position:relative}
 .ch blockquote::before{content:'\201C';position:absolute;top:8px;left:10px;font-size:2.4rem;color:var(--accent);opacity:.12;font-family:Georgia,serif}
@@ -287,8 +292,13 @@ body{font-family:var(--f-body);font-size:var(--fs);line-height:var(--lh);backgro
       <div class="ld"><div class="ld-sp"></div><div class="ld-tx">콘텐츠를 불러오는 중...</div></div>
     </div>
 
-    <!-- Copyright -->
+    <!-- Disclaimer + Copyright -->
     <section class="colophon" id="colophon" style="display:none">
+      <div class="c-info">
+        본 자료는 투자 교육 목적으로 제작되었으며,<br>
+        특정 종목에 대한 매수·매도 추천이 아닙니다.<br>
+        투자 판단의 책임은 투자자 본인에게 있습니다.
+      </div>
       <div class="c-copy">
         &copy; 2025 주식회사 뮤즈에이아이. All rights reserved.<br>
         출판사 등록번호 251002023000251
@@ -343,6 +353,13 @@ async function load(){
   }
   a.innerHTML=h;
   document.getElementById('colophon').style.display='';
+  // Insert page numbers
+  document.querySelectorAll('.ch').forEach((el,i)=>{
+    const pg=document.createElement('span');
+    pg.className='pg';
+    pg.textContent=String(i+1).padStart(2,'0');
+    el.appendChild(pg);
+  });
   // Insert part dividers (간지)
   const dividers=[
     {before:'s11',num:'Part 1',title:'Language',sub:'회계라는 언어를 먼저 배워라'},
