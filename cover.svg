@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1120" width="800" height="1120">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#0a0f1a"/>
+      <stop offset="40%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8556d"/>
+      <stop offset="100%" stop-color="#ff7a8e"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f0c050"/>
+      <stop offset="100%" stop-color="#d4a03a"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="40" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softglow">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="bookclip">
+      <rect x="0" y="0" width="800" height="1120" rx="0"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="1120" fill="url(#bg)" clip-path="url(#bookclip)"/>
+
+  <!-- Abstract data visualization lines -->
+  <g opacity="0.06" stroke="#e8556d" stroke-width="0.5" fill="none">
+    <path d="M0,400 Q200,350 400,420 T800,380"/>
+    <path d="M0,450 Q200,400 400,470 T800,430"/>
+    <path d="M0,500 Q200,450 400,520 T800,480"/>
+    <path d="M0,550 Q200,500 400,570 T800,530"/>
+    <path d="M0,600 Q200,550 400,620 T800,580"/>
+    <path d="M0,650 Q200,600 400,670 T800,630"/>
+    <path d="M0,700 Q200,650 400,720 T800,680"/>
+  </g>
+
+  <!-- Glowing orbs -->
+  <circle cx="650" cy="280" r="120" fill="#e8556d" opacity="0.04" filter="url(#glow)"/>
+  <circle cx="150" cy="750" r="100" fill="#ff7a8e" opacity="0.03" filter="url(#glow)"/>
+  <circle cx="400" cy="500" r="200" fill="#e8556d" opacity="0.02" filter="url(#glow)"/>
+
+  <!-- Accent line -->
+  <line x1="80" y1="340" x2="200" y2="340" stroke="url(#accent)" stroke-width="3" opacity="0.8"/>
+
+  <!-- Series badge -->
+  <text x="80" y="310" font-family="'Pretendard','Helvetica Neue',sans-serif" font-size="11" font-weight="600" letter-spacing="4" fill="#f0c050" opacity="0.85">DART INSIGHT SERIES</text>
+
+  <!-- Title -->
+  <text x="80" y="420" font-family="'Georgia','Noto Serif KR',serif" font-size="72" font-weight="900" fill="#ffffff" letter-spacing="-2">Financial</text>
+  <text x="80" y="510" font-family="'Georgia','Noto Serif KR',serif" font-size="72" font-weight="900" fill="url(#accent)" font-style="italic" letter-spacing="-2">Signal</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="580" font-family="'Pretendard','Helvetica Neue',sans-serif" font-size="18" font-weight="300" fill="#94a3b8" letter-spacing="0.5">재무제표가 보내는 시그널을 읽는 법</text>
+
+  <!-- Divider -->
+  <line x1="80" y1="620" x2="160" y2="620" stroke="#475569" stroke-width="1"/>
+
+  <!-- Quote -->
+  <text x="80" y="670" font-family="'Georgia','Noto Serif KR',serif" font-size="14" font-style="italic" fill="#64748b" opacity="0.8">"재무제표는 경영진이 쓴 자서전이다.</text>
+  <text x="80" y="695" font-family="'Georgia','Noto Serif KR',serif" font-size="14" font-style="italic" fill="#64748b" opacity="0.8"> 모든 자서전이 그렇듯, 쓰인 것보다 빠진 것이 더 중요하다."</text>
+
+  <!-- Abstract chart element (candlestick-like) -->
+  <g transform="translate(500, 380)" opacity="0.12">
+    <rect x="0" y="40" width="8" height="60" fill="#e8556d" rx="1"/>
+    <line x1="4" y1="20" x2="4" y2="120" stroke="#e8556d" stroke-width="1"/>
+    <rect x="20" y="20" width="8" height="80" fill="#4ade80" rx="1"/>
+    <line x1="24" y1="0" x2="24" y2="110" stroke="#4ade80" stroke-width="1"/>
+    <rect x="40" y="50" width="8" height="40" fill="#e8556d" rx="1"/>
+    <line x1="44" y1="30" x2="44" y2="100" stroke="#e8556d" stroke-width="1"/>
+    <rect x="60" y="10" width="8" height="70" fill="#4ade80" rx="1"/>
+    <line x1="64" y1="0" x2="64" y2="90" stroke="#4ade80" stroke-width="1"/>
+    <rect x="80" y="30" width="8" height="50" fill="#4ade80" rx="1"/>
+    <line x1="84" y1="10" x2="84" y2="95" stroke="#4ade80" stroke-width="1"/>
+    <rect x="100" y="60" width="8" height="45" fill="#e8556d" rx="1"/>
+    <line x1="104" y1="40" x2="104" y2="120" stroke="#e8556d" stroke-width="1"/>
+    <rect x="120" y="25" width="8" height="55" fill="#4ade80" rx="1"/>
+    <line x1="124" y1="5" x2="124" y2="95" stroke="#4ade80" stroke-width="1"/>
+    <rect x="140" y="45" width="8" height="35" fill="#e8556d" rx="1"/>
+    <line x1="144" y1="25" x2="144" y2="100" stroke="#e8556d" stroke-width="1"/>
+    <rect x="160" y="15" width="8" height="65" fill="#4ade80" rx="1"/>
+    <line x1="164" y1="0" x2="164" y2="90" stroke="#4ade80" stroke-width="1"/>
+    <rect x="180" y="35" width="8" height="50" fill="#e8556d" rx="1"/>
+    <line x1="184" y1="15" x2="184" y2="105" stroke="#e8556d" stroke-width="1"/>
+  </g>
+
+  <!-- Number grid (abstract financial data) -->
+  <g font-family="'SF Mono','Consolas',monospace" font-size="10" fill="#334155" opacity="0.15">
+    <text x="80" y="800">CFO/NI  1.13  1.10  -0.54</text>
+    <text x="80" y="818">DSO     45d   62d   192d</text>
+    <text x="80" y="836">ROIC    14.5% 8.7%  6.3%</text>
+    <text x="80" y="854">FCF/Rev 24%   28%   23%</text>
+    <text x="80" y="872">PBR     0.81  0.75  0.40</text>
+    <text x="80" y="890">D/EBITDA 1.8x 4.2x  5.2x</text>
+  </g>
+
+  <!-- Bottom section -->
+  <line x1="80" y1="960" x2="720" y2="960" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Author -->
+  <text x="80" y="1000" font-family="'Pretendard','Helvetica Neue',sans-serif" font-size="14" font-weight="500" fill="#64748b">DART Insight</text>
+
+  <!-- Bottom accent bar -->
+  <rect x="0" y="1100" width="800" height="20" fill="url(#accent)" opacity="0.8"/>
+
+  <!-- Page edge effect (right side) -->
+  <rect x="790" y="0" width="10" height="1120" fill="#0a0f1a" opacity="0.3"/>
+  <line x1="795" y1="0" x2="795" y2="1120" stroke="#1e293b" stroke-width="0.5"/>
+</svg>
