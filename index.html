@@ -105,8 +105,16 @@ body{font-family:var(--f-body);font-size:var(--fs);line-height:var(--lh);backgro
 .ch h1:first-child{position:relative}
 
 /* ── Prologue & Epilogue special ── */
-#s00 .ch,#s00{border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0}
-#s70{border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0}
+#s00.ch,#s70.ch{border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0}
+
+/* ── Part divider (간지) ── */
+.part-divider{
+  text-align:center;padding:48px 20px 36px;margin:40px 0 8px;position:relative;
+}
+.part-divider::before{content:'';display:block;width:40px;height:2px;background:var(--accent);margin:0 auto 20px;border-radius:1px}
+.part-divider .pd-num{font-family:var(--f-ui);font-size:.62rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.part-divider .pd-title{font-family:var(--f-body);font-size:1.4rem;font-weight:900;color:var(--fg);letter-spacing:-.01em;margin-bottom:6px}
+.part-divider .pd-sub{font-family:var(--f-ui);font-size:.78rem;color:var(--muted);font-weight:300}
 
 /* ── Smooth image-like borders on strong emphasis ── */
 .ch strong{letter-spacing:.01em}
@@ -178,15 +186,26 @@ body{font-family:var(--f-body);font-size:var(--fs);line-height:var(--lh);backgro
 /* ── Responsive ── */
 @media(max-width:900px){
   .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,.15)}
-  .ham{display:flex}.main{margin-left:0}.main-in{padding:0 24px 80px}
-  .hero{padding:80px 24px 60px}
+  .ham{display:flex}.main{margin-left:0}.main-in{padding:0 20px 80px}
+  .hero{padding:72px 20px 52px}
+  .hero-quote{margin-top:24px}
   .ch{padding:32px 24px;border-radius:var(--r-s)}
+  .ch h2{font-size:1.4rem;padding-left:12px}.ch h3{font-size:1.15rem;padding-left:12px}
+  .ch pre{padding:16px 18px;font-size:.82rem}
+  .part-divider{padding:36px 16px 28px;margin:28px 0 4px}
+  .part-divider .pd-title{font-size:1.2rem}
+  .colophon{padding:48px 16px 36px}
 }
 @media(max-width:600px){
-  .main-in{padding:0 12px 60px}.ch{padding:24px 16px}
-  .ch h3{padding-left:12px}.hero h1{font-size:1.8rem}
-  .ch table{font-size:.78rem}.ch thead th,.ch tbody td{padding:8px 10px}
-  .fl{bottom:16px;right:16px}.fb{width:38px;height:38px;font-size:.95rem}
+  .main-in{padding:0 12px 60px}.ch{padding:20px 14px}
+  .ch h2{font-size:1.25rem}.ch h3{font-size:1.05rem}
+  .ch h2+p::first-letter{font-size:2.4em;padding-right:6px}
+  .hero h1{font-size:1.7rem}.hero-sub{font-size:.88rem}.hero-quote{font-size:.78rem}
+  .ch table{font-size:.76rem}.ch thead th,.ch tbody td{padding:7px 8px}
+  .ch pre{padding:14px 14px;font-size:.78rem}
+  .ch blockquote{padding:16px 18px;font-size:.88rem}
+  .fl{bottom:14px;right:14px}.fb{width:36px;height:36px;font-size:.9rem}
+  .colophon .c-title{font-size:1rem}.colophon .c-info{font-size:.68rem}
 }
 @media print{.sidebar,.fl,.ham,#progress,.overlay,.hero{display:none!important}.main{margin-left:0!important}.ch{break-inside:avoid;box-shadow:none!important;border:1px solid #ddd}}
 </style>
@@ -324,6 +343,24 @@ async function load(){
   }
   a.innerHTML=h;
   document.getElementById('colophon').style.display='';
+  // Insert part dividers (간지)
+  const dividers=[
+    {before:'s11',num:'Part 1',title:'Language',sub:'회계라는 언어를 먼저 배워라'},
+    {before:'s21',num:'Part 2',title:'Assets & Growth',sub:'자산이 진짜 가치인가, 성장은 지속되는가'},
+    {before:'s31',num:'Part 3',title:'Liabilities',sub:'진짜 부채를 보는 눈'},
+    {before:'s41',num:'Part 4',title:'Earnings Quality',sub:'이 이익은 진짜인가'},
+    {before:'s51',num:'Part 5',title:'Valuation',sub:'내재가치 계산의 알고리즘'},
+    {before:'s61',num:'Part 6',title:'Advanced Signals',sub:'연결과 공시에서 읽는 마지막 신호'},
+  ];
+  dividers.forEach(d=>{
+    const el=document.getElementById(d.before);
+    if(el){
+      const div=document.createElement('div');
+      div.className='part-divider';
+      div.innerHTML=`<div class="pd-num">${d.num}</div><div class="pd-title">${d.title}</div><div class="pd-sub">${d.sub}</div>`;
+      el.parentNode.insertBefore(div,el);
+    }
+  });
   obs();navHL();
 }
 function split(m,ids){const p=[];let r=m;for(const s of ids){const pt=SP[s];if(!pt)continue;const mt=r.match(pt);if(mt){const i=r.indexOf(mt[0]);p.push(r.substring(0,i));r=r.substring(i)}}p.push(r);return p}
